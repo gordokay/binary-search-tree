@@ -14,17 +14,19 @@ class Tree {
   }
 
   buildTree(arr) {
-    if(!this.root) {
-      arr = removeDuplicates(mergeSort(arr));
-      this.root = new Node(arr[Math.floor(arr.length / 2)]);
-    }
-    
+    if(!this.root) arr = removeDuplicates(mergeSort(arr));
     if(arr.length === 0) return null;
-
     const root = new Node(arr[Math.floor(arr.length / 2)]);
-    root.left = this.buildTree(arr.slice(0, arr.length / 2));
-    root.right = this.buildTree(arr.slice(arr.length / 2 + 1));
-
+    if(!this.root) this.root = root;
+    root.left = this.buildTree(arr.slice(0, Math.floor(arr.length / 2)));
+    root.right = this.buildTree(arr.slice(Math.floor(arr.length / 2) + 1));
     return root;
+  }
+
+  find(val, root) {
+    if(root === null) return null;
+    if(root.data === val) return root;
+    if(root.data < val) return this.find(val, root.right);
+    if(root.data > val) return this.find(val, root.left);
   }
 }
