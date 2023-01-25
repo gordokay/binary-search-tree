@@ -23,10 +23,27 @@ class Tree {
     return root;
   }
 
-  find(val, root) {
+  find(val, root = this.root) {
     if(root === null) return null;
     if(root.data === val) return root;
     if(root.data < val) return this.find(val, root.right);
     if(root.data > val) return this.find(val, root.left);
+  }
+
+  insert(val, root = this.root) {
+    if(root.data === val) return;
+    if(root.data < val) {
+      if(!root.right) {
+        root.right = new Node(val);
+        return;
+      }
+      this.insert(val, root.right);
+    } else {
+      if(!root.left) {
+        root.left = new Node(val);
+        return;
+      }
+      this.insert(val, root.left);
+    }
   }
 }
