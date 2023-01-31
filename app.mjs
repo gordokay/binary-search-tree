@@ -46,4 +46,57 @@ class Tree {
       this.insert(val, root.left);
     }
   }
+
+  delete(root, val) {
+    if(!root) return root;
+    if(root.data < val) root.right = this.delete(root.right, val);
+    else if (root.data > val) root.left = this.delete(root.left, val);
+    else {
+      if(!root.left && !root.right) {
+        root = null;
+      } else if ((root.left && !root.right) || (root.right && !root.left)) {
+        root = root.left || root.right;
+      } else {
+        root.data = this.minimum(root.right).data;
+        root.right = this.delete(root.right, root.data);
+      }
+    }
+    return root;
+  }
+
+  minimum(root) {
+    if(!root.left) return root;
+    return this.minimum(root.left);
+  }
 }
+
+const prettyPrint = (node, prefix = '', isLeft = true) => {
+  if (node.right !== null) {
+    prettyPrint(node.right, `${prefix}${isLeft ? '│   ' : '    '}`, false);
+  }
+  console.log(`${prefix}${isLeft ? '└── ' : '┌── '}${node.data}`);
+  if (node.left !== null) {
+    prettyPrint(node.left, `${prefix}${isLeft ? '    ' : '│   '}`, true);
+  }
+}
+
+const test = () => {
+  const t = new Tree();
+  const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
+  t.buildTree(arr);
+  prettyPrint(t.root);
+  console.log('*************')
+  t.delete(t.root, 7);
+  prettyPrint(t.root);
+  console.log('*************')
+  t.delete(t.root, 67);
+  prettyPrint(t.root);
+  console.log('*************')
+  t.delete(t.root, 1);
+  prettyPrint(t.root);
+  console.log('*************')
+  t.delete(t.root, 8);
+  prettyPrint(t.root);
+} 
+
+test();
