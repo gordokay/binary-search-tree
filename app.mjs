@@ -68,6 +68,20 @@ class Tree {
     if(!root.left) return root;
     return this.minimum(root.left);
   }
+
+  levelOrder(root, cb) {
+    const queue = [];
+    const processedNodes = [];
+    queue.push(root);
+    while(queue.length) {
+      const processedNode = queue.shift();
+      if(cb) cb(processedNode);
+      processedNodes.push(processedNode.data);
+      if(processedNode.left) queue.push(processedNode.left);
+      if(processedNode.right) queue.push(processedNode.right);
+    }
+    return processedNodes;
+  }
 }
 
 const prettyPrint = (node, prefix = '', isLeft = true) => {
@@ -85,18 +99,7 @@ const test = () => {
   const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
   t.buildTree(arr);
   prettyPrint(t.root);
-  console.log('*************')
-  t.delete(t.root, 7);
-  prettyPrint(t.root);
-  console.log('*************')
-  t.delete(t.root, 67);
-  prettyPrint(t.root);
-  console.log('*************')
-  t.delete(t.root, 1);
-  prettyPrint(t.root);
-  console.log('*************')
-  t.delete(t.root, 8);
-  prettyPrint(t.root);
+  console.log(t.levelOrder(t.root));
 } 
 
 test();
