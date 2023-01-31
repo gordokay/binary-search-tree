@@ -82,6 +82,36 @@ class Tree {
     }
     return processedNodes;
   }
+
+  inorder(root, cb) {
+    if(!root) return [];
+    let processedNodes = [];
+    processedNodes = processedNodes.concat(this.inorder(root.left));
+    if(cb) cb(root);
+    processedNodes.push(root.data);
+    processedNodes = processedNodes.concat(this.inorder(root.right));
+    return processedNodes;
+  }
+
+  preorder(root, cb) {
+    if(!root) return [];
+    let processedNodes = [];
+    if(cb) cb(root);
+    processedNodes.push(root.data);
+    processedNodes = processedNodes.concat(this.preorder(root.left));
+    processedNodes = processedNodes.concat(this.preorder(root.right));
+    return processedNodes;
+  }
+
+  postorder(root, cb) {
+    if(!root) return [];
+    let processedNodes = [];
+    processedNodes = processedNodes.concat(this.postorder(root.left));
+    processedNodes = processedNodes.concat(this.postorder(root.right));
+    if(cb) cb(root);
+    processedNodes.push(root.data);
+    return processedNodes;
+  }
 }
 
 const prettyPrint = (node, prefix = '', isLeft = true) => {
@@ -100,6 +130,9 @@ const test = () => {
   t.buildTree(arr);
   prettyPrint(t.root);
   console.log(t.levelOrder(t.root));
+  console.log(t.inorder(t.root));
+  console.log(t.preorder(t.root));
+  console.log(t.postorder(t.root));
 } 
 
 test();
