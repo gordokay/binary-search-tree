@@ -112,6 +112,38 @@ class Tree {
     processedNodes.push(root.data);
     return processedNodes;
   }
+
+  height(root) {
+    if(!root) return -1;
+    if(!root.left && !root.right) return 0;
+    const leftHeight = this.height(root.left);
+    const rightHeight = this.height(root.right);
+    return Math.max(leftHeight, rightHeight) + 1;
+  }
+
+  depth(root) {
+    let edges = 0;
+    let current = this.root;
+    while(current) {
+      if(current === root) break;
+      if(current.data > root.data) current = current.left;
+      else current = current.right;
+      edges++;
+    }
+    return edges;
+  }
+
+  isBalanced(root) {
+    if(!root || !root.left || !root.right) return true;
+    if(Math.abs(this.height(root.left) - this.height(root.right)) > 1) return false;
+    return this.isBalanced(root.left) && this.isBalanced(root.right);
+  }
+
+  rebalance() {
+    const inorderArray = this.inorder(this.root);
+    this.root = null;
+    this.buildTree(inorderArray);
+  }
 }
 
 const prettyPrint = (node, prefix = '', isLeft = true) => {
@@ -129,10 +161,18 @@ const test = () => {
   const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
   t.buildTree(arr);
   prettyPrint(t.root);
-  console.log(t.levelOrder(t.root));
+  console.log(t.isBalanced(t.root));
+  t.insert(101);
+  t.insert(200);
+  t.insert(300);
+  t.insert(400);
+  t.insert(500);
+  prettyPrint(t.root);
+  console.log(t.isBalanced(t.root));
+  t.rebalance();
+  prettyPrint(t.root);
+  console.log(t.isBalanced(t.root));
   console.log(t.inorder(t.root));
-  console.log(t.preorder(t.root));
-  console.log(t.postorder(t.root));
 } 
 
 test();
